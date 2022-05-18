@@ -1,0 +1,31 @@
+
+.sectionPage .allSections .sectionList .section{
+    padding: 0 19px 19px 19px;
+}
+.sectionPage .allSections .sectionList .section:last-of-type{
+    margin-bottom: 127px;
+}
+
+.sectionPage .allSections .sectionList .section .sectionDate{
+    margin: 0 0 16px 4px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.02em;
+    color: #293845;
+}
+
+li.section .sectionButton{
+    margin: 4px;
+    width: 83px;
+    height: 43px;
+    background: #E8833A;
+    border-radius: 3px;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+}

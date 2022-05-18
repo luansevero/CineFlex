@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./style.css"
 
-import MoviePosters from "./HomePage_components/MoviePosters";
+import MoviePosters from "./MoviePosters";
+import SubHeader from "../../shared/SubHeader/SubHeader";
 
 export default function HomePage() {
 
@@ -18,17 +19,14 @@ export default function HomePage() {
 
     return (
         <main className="homePage">
-            <header className="homePageHeader">
-                <h1 className="headerTitle">Selecione o filme</h1>
-            </header>
+            <SubHeader headerClass="subHeader" headerTitle="Selecione o filme" />
             <section className="allMovies">
                 <ul className="movieList">
                     {moviePoster.map((poster) => 
-                        <MoviePosters id={poster.id} title={poster.title} posterSource={poster.posterURL} />
+                        <MoviePosters movieId={poster.id} title={poster.title} posterSource={poster.posterURL} />
                     )}
                 </ul>
             </section>
-
         </main>
     )
 }
