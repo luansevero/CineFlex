@@ -4,10 +4,10 @@ import styled from "styled-components";
 
 export default function AllSeats({ seatId, seatNumber, isAvailable, setSeatsSelected, seatsSelected }){
     const [stillAvailable, setStillAvailable] = useState(true);
-    const [seatNotAvailable, setSeatNotAvailable] = useState(isAvailable)
+    const [seatIsAvailable, setSeatIsAvailable] = useState(isAvailable)
 
-    function isSeatAvailable(seatNotAvailable, stillAvailable, seatId){
-        if(!seatNotAvailable){
+    function isSeatAvailable(seatIsAvailable, stillAvailable, seatId){
+        if(!seatIsAvailable){
             alert(`Esse assento não está disponível`)
         } else {
             setStillAvailable(!stillAvailable);
@@ -18,14 +18,14 @@ export default function AllSeats({ seatId, seatNumber, isAvailable, setSeatsSele
     }
 
     return(
-        <SeatButton key={seatId} id={seatId} onClick={() => isSeatAvailable(seatNotAvailable, stillAvailable, seatId)} seatColor={stillAvailable} seatNotAvailable={seatNotAvailable}>
+        <SeatButton key={seatId} id={seatId} onClick={() => isSeatAvailable(seatIsAvailable, stillAvailable, seatId)} seatColor={stillAvailable} seatIsAvailable={seatIsAvailable}>
             <p>{seatNumber}</p>
         </SeatButton>
     )
 }
 const SeatButton = styled.button`
-    background-color: #${props => props.seatNotAvailable ? (props.seatColor ? "C3CFD9" : "1AAE9E") : "FBE192"};
-    border: 1px solid #${props => props.seatNotAvailable ? (props.seatColor ? "808F9D" : "45BDB0") : "F7C52B"};
+    background-color: #${props => props.seatIsAvailable ? (props.seatColor ? "C3CFD9" : "1AAE9E") : "FBE192"};
+    border: 1px solid #${props => props.seatIsAvailable ? (props.seatColor ? "808F9D" : "45BDB0") : "F7C52B"};
 
     p{
         font-weight: 400;

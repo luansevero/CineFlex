@@ -16,17 +16,39 @@ export default function SectionPage(){
     const [seats, setSeats] = useState([])
     const [movieInfos, setMovieInfos] = useState([])
     const [seatsSelected, setSeatsSelected] = useState([]);
-
+    const [customers, setCustumer] = useState()
+    const [sucessInfos, setSucessInfos] = useState({});
+    
     useEffect(() => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
 
         promisse.then((res) => {
-            setMovieInfos(res.data);
+            setMovieInfos({
+                poster: res.data.movie.posterURL,
+                title: res.data.movie.title,
+                weekday: res.data.day.weekday,
+                hour: res.data.name
+                });
             setSeats(res.data.seats)
             setIsLoading(false)
         })
     }, [])
 
+    function isAllowToBuy(seatsSelected, customers){
+        if(seatsSelected.length){
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function reservSeats(event){
+        event.preventDefault();
+            if(seatsSelected !== []){
+                const promisse = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", );
+            promisse.then()
+            }
+    }
 
     return(
         <Main>
@@ -56,9 +78,13 @@ export default function SectionPage(){
                 </SeatInfo>
             </Section>
             <Section>
-                <SeatsForm />
+                {(isAllowToBuy(seatsSelected, customers))
+                ?   <SeatsForm seatsSelected={seatsSelected} reservSeats={reservSeats}/>
+                :   <SeatsForm seatsSelected={seatsSelected} />
+                }
+                
             </Section>
-            <PageFooter sectionSelected={true} posterTitle={movieInfos.movie.title} posterSource={movieInfos.movie.posterURL} movieSectionDay={movieInfos.day.weekday} movieSectionHour={movieInfos.name}/>
+            <PageFooter sectionSelected={true} posterTitle={movieInfos.title} posterSource={movieInfos.poster} movieSectionDay={movieInfos.weekday} movieSectionHour={movieInfos.hour}/>
             </>
             }
             
