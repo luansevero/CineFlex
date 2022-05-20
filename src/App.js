@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
-import PagesHeader from "./shared/PageHeader/PagesHeader";
+import PagesHeader from "./shared/PagesHeader";
 import HomePage from "./components/HomePage/HomePage";
 import MoviePage from "./components/MoviePage/MoviePage";
 

@@ -4,9 +4,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./style.css"
 
-import SubHeader from "../../shared/SubHeader/SubHeader";
+import SubHeader from "../../shared/SubHeader";
 import MovieSections from "./MovieSections";
-import PageFooter from "../../shared/pageFooter/PagesFooter";
+import PageFooter from "../../shared/PagesFooter";
 
 export default function MoviePage(){
 

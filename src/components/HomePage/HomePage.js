@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import "./style.css"
+import styled from "styled-components";
 
 import MoviePosters from "./MoviePosters";
-import SubHeader from "../../shared/SubHeader/SubHeader";
+import SubHeader from "../../shared/SubHeader"
 
 export default function HomePage() {
 
@@ -18,15 +17,35 @@ export default function HomePage() {
     }, []);
 
     return (
-        <main className="homePage">
+        <Main>
             <SubHeader headerClass="subHeader" headerTitle="Selecione o filme" />
-            <section className="allMovies">
-                <ul className="movieList">
+            <Section>
+                <ListOfMovies>
                     {moviePoster.map((poster) => 
                         <MoviePosters movieId={poster.id} title={poster.title} posterSource={poster.posterURL} />
                     )}
-                </ul>
-            </section>
-        </main>
+                </ListOfMovies>
+            </Section>
+        </Main>
     )
 }
+
+const Main = styled.main`
+    display: flex;
+    flex-direction: column;
+`
+const Section = styled.section`
+    width: 100%;
+    padding: 0 12.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;  
+`
+const ListOfMovies = styled.ul`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+
+`
