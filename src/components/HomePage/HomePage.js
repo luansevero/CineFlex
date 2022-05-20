@@ -4,28 +4,35 @@ import styled from "styled-components";
 
 import MoviePosters from "./MoviePosters";
 import SubHeader from "../../shared/SubHeader"
+import Loading from "../../shared/Loading"
 
 export default function HomePage() {
-
+    const [isLoading, setLoading] = useState(true)
     const [moviePoster, setMoviePoster] = useState([]);
 
     useEffect(() => {
         const promisse = axios.get("https://mock-api.driven.com.br/api/v5/cineflex/movies");
         promisse.then(response => {
             setMoviePoster(response.data)
+            setLoading(false)
         });
     }, []);
 
     return (
         <Main>
-            <SubHeader headerClass="subHeader" headerTitle="Selecione o filme" />
-            <Section>
-                <ListOfMovies>
-                    {moviePoster.map((poster) => 
-                        <MoviePosters movieId={poster.id} title={poster.title} posterSource={poster.posterURL} />
-                    )}
-                </ListOfMovies>
-            </Section>
+            {isLoading
+                ? <Loading />
+                : <>
+                    <SubHeader headerClass="subHeader" headerTitle="Selecione o filme" />
+                    <Section>
+                        <ListOfMovies>
+                            {moviePoster.map((poster) =>
+                                <MoviePosters movieId={poster.id} title={poster.title} posterSource={poster.posterURL} />
+                            )}
+                        </ListOfMovies>
+                    </Section>
+                </>
+            }
         </Main>
     )
 }
@@ -34,6 +41,7 @@ const Main = styled.main`
     display: flex;
     flex-direction: column;
 `
+
 const Section = styled.section`
     width: 100%;
     padding: 0 12.5px;

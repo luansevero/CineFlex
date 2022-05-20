@@ -5,11 +5,7 @@ export default function MoviePosters({ movieId, title , posterSource }) {
     return (
         <Poster key={movieId} id={movieId}>
             <Link to={`/sessoes/${movieId}`}>
-                {posterSource ? (
-                    <img src={posterSource} alt={title} />
-                ) : (
-                    "Carregando Poster"
-                )}
+                <img src={posterSource} alt={title} />
             </Link>
         </Poster>
     )
