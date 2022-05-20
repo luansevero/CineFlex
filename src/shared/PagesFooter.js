@@ -1,19 +1,20 @@
 import { useState } from "react"
 import styled from "styled-components";
 
-export default function PageFooter( { sectionSelected, posterTitle, posterSource, posterSection } ){
-
+export default function PageFooter( { sectionSelected, posterTitle, posterSource, movieSectionDay, movieSectionHour } ){
     return(
         <Footer>
             <PosterFrame>
                 <img src={posterSource} alt={posterTitle} />
             </PosterFrame>
+            <Container>
             <h2>{posterTitle}</h2>
             {sectionSelected ? (
-                <h2>{posterSection}</h2>
+                <h2>{movieSectionDay} - {movieSectionHour}</h2>
             ) : (
                 ""
             )}
+            </Container>
         </Footer>
     )
 }
@@ -29,6 +30,13 @@ const Footer = styled.footer`
     display: flex;
     padding: 14px 10px;
 
+
+`
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
     h2{
         margin-left: 14px;
         font-weight: 400;
@@ -39,7 +47,6 @@ const Footer = styled.footer`
         color: #293845; 
     }
 `
-
 const PosterFrame = styled.div`
     width: 64px;
     height: 89px;

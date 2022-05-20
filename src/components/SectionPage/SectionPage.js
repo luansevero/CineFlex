@@ -1,11 +1,124 @@
-import SubHeader from "../../shared/SubHeader/SubHeader"
-export default function SectionPage(){
-    return(
-        <main>
-            <SubHeader headerClass="subHeader" headerTitle="Selecione o(s) assento(s)" />
-            <section className="allSeats">
+import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom";
 
-            </section>
-        </main>
+import styled from "styled-components";
+import axios from "axios";
+
+import SubHeader from "../../shared/SubHeader"
+import Loading from "../../shared/Loading"
+import AllSeats from "./AllSeats";
+import PageFooter from "../../shared/PagesFooter"
+import SeatsForm from "./SeatsForm";
+
+export default function SectionPage(){
+    const { idSessao } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
+    const [seats, setSeats] = useState([])
+    const [movieInfos, setMovieInfos] = useState([])
+    const [seatsSelected, setSeatsSelected] = useState([]);
+
+    useEffect(() => {
+        const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
+
+        promisse.then((res) => {
+            setMovieInfos(res.data);
+            setSeats(res.data.seats)
+            setIsLoading(false)
+        })
+    }, [])
+
+
+    return(
+        <Main>
+            {isLoading 
+            ? <Loading />
+            :<>
+            <SubHeader headerClass="subHeader" headerTitle="Selecione o(s) assento(s)" />
+            <Section>
+                <SeatsContainer>
+                    {seats.map((seat) =>
+                        <AllSeats seatId={seat.id} seatNumber={seat.name} isAvailable={seat.isAvailable} setSeatsSelected={setSeatsSelected} seatsSelected={seatsSelected}/>
+                    )}
+                </SeatsContainer>
+                <SeatInfo>
+                        <div>
+                            <Circle color="8DD7CF" borderColor="1AAE9E"></Circle>
+                            <h2>Selecionado</h2>
+                        </div>
+                        <div>
+                            <Circle color="C3CFD9" borderColor="7B8B99"></Circle>
+                            <h2>Disponível</h2>
+                        </div>
+                        <div>
+                            <Circle color="FBE192" borderColor="F7C52B"></Circle>
+                            <h2>Indisponível</h2>
+                        </div>
+                </SeatInfo>
+            </Section>
+            <Section>
+                <SeatsForm />
+            </Section>
+            <PageFooter sectionSelected={true} posterTitle={movieInfos.movie.title} posterSource={movieInfos.movie.posterURL} movieSectionDay={movieInfos.day.weekday} movieSectionHour={movieInfos.name}/>
+            </>
+            }
+            
+        </Main>
     )
 }
+
+const Main = styled.main`
+    display: flex;
+    flex-direction: column;
+`
+
+const Section = styled.section`
+    width: 100%;
+    padding: 0 24px;
+    margin-bottom: 150px;
+    &:first-of-type {
+        margin-bottom: 40px;
+        padding: 0 21px;
+    }
+`
+const SeatsContainer = styled.div`
+    max-width: 330px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    button{
+        width: 26px;
+        height: 26px;
+        margin: 0 3.5px 18px 3.5px;
+        border-radius: 12px;
+        text-align: center;
+    }
+`
+const SeatInfo = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+    width: 327px;
+    margin: 0 auto;
+    
+    > div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+    }
+    h2{
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 15px;
+        letter-spacing: -0.013em;
+        color: #4E5A65;
+    }
+`
+const Circle = styled.div`
+    width: 25px;
+    height: 25px;
+    background: #${props => props.color};
+    border: 1px solid #${props => props.borderColor};
+    border-radius: 17px;
+`
