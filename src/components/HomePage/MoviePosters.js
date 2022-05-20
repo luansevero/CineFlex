@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export default function MoviePosters({ movieId, title , posterSource }) {
     return (
-        <Poster>
+        <Poster key={movieId} id={movieId}>
             <Link to={`/sessoes/${movieId}`}>
                 {posterSource ? (
                     <img src={posterSource} alt={title} />

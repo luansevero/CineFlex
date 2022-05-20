@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom";
 
 import axios from "axios";
-import "./style.css"
+import styled from "styled-components";
 
 import SubHeader from "../../shared/SubHeader";
 import MovieSections from "./MovieSections";
@@ -25,16 +25,20 @@ export default function MoviePage(){
     }, [])
     
     return(
-        <main className="sectionPage">
+        <main>
             <SubHeader headerClass="subHeader" headerTitle="Selecione o horário" />
-            <section className="allSections">
-                <ul className="sectionList">
+            <section>
+                <ListOfSections>
                     {days.map((sect) =>
                         <MovieSections dayId={sect.id} weekday={sect.weekday} date={sect.date} showtimes={sect.showtimes} />
                     )}
-                </ul>
+                </ListOfSections>
             </section>
             <PageFooter sectionSelected={sectionDescription} posterTitle={sections.title} posterSource={sections.posterURL} />
         </main>
     )
 }
+
+const ListOfSections = styled.ul`
+    margin-bottom: 127px;
+`
