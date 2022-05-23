@@ -19,7 +19,7 @@ export default function SucessPage(){
             <Section>
                 <h1>Ingressos</h1>
                 {sucessData.seats.map((seat) =>
-                    <h2>Assento {seat}</h2>
+                    <h2>Assento {(seat % 50)}</h2>
                 )}
             </Section>
             <Section>
