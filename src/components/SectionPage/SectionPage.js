@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import axios from "axios";
@@ -12,13 +13,11 @@ import SeatsForm from "./SeatsForm";
 
 export default function SectionPage(){
     const { idSessao } = useParams();
-    let sucess = useHistory();
+    const history = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [seats, setSeats] = useState([])
     const [movieInfos, setMovieInfos] = useState([])
     const [seatsSelected, setSeatsSelected] = useState([]);
-    const [customers, setCustumer] = useState()
-    const [sucessInfos, setSucessInfos] = useState({});
     const [customerCPF, setCustomerCPF] = useState("");
     const [customerName, setCustomerName] = useState("");
     
@@ -30,6 +29,7 @@ export default function SectionPage(){
                 poster: res.data.movie.posterURL,
                 title: res.data.movie.title,
                 weekday: res.data.day.weekday,
+                date: res.data.day.date,
                 hour: res.data.name
                 });
             setSeats(res.data.seats)
@@ -37,8 +37,8 @@ export default function SectionPage(){
         })
     }, [])
 
-    function isAllowToBuy(seatsSelected, customerName, customerCPF){
-        if(seatsSelected.length && customerName.length > 0 && customerCPF.length == 11){
+    function isAllowToBuy(){
+        if(seatsSelected.length && customerName.length > 0 && String(customerCPF).length == 11){
             return true
         } else {
             return false
@@ -47,15 +47,23 @@ export default function SectionPage(){
 
     function reservSeats(event){
         event.preventDefault();
-        setSucessInfos({
-            ids: seatsSelected,
-            name: customerName,
-            cpf: customerCPF
-        })
-        if(isAllowToBuy(seatsSelected, customerName, customerCPF)){
-            const promisse = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", sucessInfos);
+        if(isAllowToBuy()){
+            const sucessData = {
+                movie: movieInfos.title,
+                weekday: movieInfos.weekday,
+                date: movieInfos.date,
+                hour: movieInfos.hour,
+                seats: seatsSelected,
+                name: customerName,
+                cpf: customerCPF
+            }
+            const promisse = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", {
+                ids: seatsSelected,
+                name: customerName,
+                cpf: String(customerCPF)
+            });
             promisse.then(
-                history.push("/sucesso")
+                history("/sucesso", {state: {receipt: sucessData}})
             )
         }
     }
@@ -88,11 +96,7 @@ export default function SectionPage(){
                 </SeatInfo>
             </Section>
             <Section>
-                {(isAllowToBuy(seatsSelected, customerName, customerCPF))
-                ?   <SeatsForm reservSeats={reservSeats} />
-                :   <SeatsForm reservSeats={reservSeats} setCustomerCPF={setCustomerCPF} setCustomerName={setCustomerName} />
-                }
-                
+                <SeatsForm reservSeats={reservSeats} setCustomerCPF={setCustomerCPF} setCustomerName={setCustomerName} customerName={customerName} customerCPF={customerCPF}/>
             </Section>
             <PageFooter sectionSelected={true} posterTitle={movieInfos.title} posterSource={movieInfos.poster} movieSectionDay={movieInfos.weekday} movieSectionHour={movieInfos.hour}/>
             </>

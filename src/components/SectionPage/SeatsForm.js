@@ -1,34 +1,19 @@
 import { useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
-export default function SeatsForm({ isAllowToBuy, reservSeats, setCustomerCPF, setCustomerName }) {
-
-    const [userName, setUserName] = useState("");
-    const [userCPF, setUserCPF] = useState("");
-
+export default function SeatsForm({ reservSeats, setCustomerCPF, setCustomerName, customerName, customerCPF }) {
 
     return (
         <Form onSubmit={reservSeats}>
             <label for="nameInput">Nome do comprador:</label>
-            <input type="text" id="nameInput" placeholder="Digite seu nome..." value={userName} onChange={e => {
-                setUserName(e.target.value);
-                (userName.length > 0) 
-                ? {setCustomerName}(userName)
-                : {setCustomerName}("")
+            <input type="text" id="nameInput" placeholder="Digite seu nome..." value={customerName} onChange={e => {
+                setCustomerName(e.target.value)
                 }} />
             <label for="cpfInput">Cpf do comprador:</label>
-            <input type="number" id="cpfInput" placeholder="Digite seu CPF..." value={userCPF} onChange={e => {
-                setUserCPF(e.target.value)
-                (userCPF.length == 11) 
-                ? {setCustomerCPF}(userCPF)
-                : {setCustomerCPF}("")
+            <input type="number" id="cpfInput" placeholder="Digite seu CPF..." value={customerCPF} onChange={e => {
+                setCustomerCPF(e.target.value)
                 }}/>
-            {isAllowToBuy 
-            ?   <Link to={"/sucesso"}><button type="submit" >Reservar assento(s)</button></Link>
-            :   <button type="submit" >Reservar assento(s)</button>}
-            
+                <button type="submit" >Reservar assento(s)</button>
         </Form>
     )
 }
