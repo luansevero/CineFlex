@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import styled from "styled-components";
 import axios from "axios";
@@ -12,12 +12,15 @@ import SeatsForm from "./SeatsForm";
 
 export default function SectionPage(){
     const { idSessao } = useParams();
+    let sucess = useHistory();
     const [isLoading, setIsLoading] = useState(true);
     const [seats, setSeats] = useState([])
     const [movieInfos, setMovieInfos] = useState([])
     const [seatsSelected, setSeatsSelected] = useState([]);
     const [customers, setCustumer] = useState()
     const [sucessInfos, setSucessInfos] = useState({});
+    const [customerCPF, setCustomerCPF] = useState("");
+    const [customerName, setCustomerName] = useState("");
     
     useEffect(() => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
@@ -34,8 +37,8 @@ export default function SectionPage(){
         })
     }, [])
 
-    function isAllowToBuy(seatsSelected, customers){
-        if(seatsSelected.length){
+    function isAllowToBuy(seatsSelected, customerName, customerCPF){
+        if(seatsSelected.length && customerName.length > 0 && customerCPF.length == 11){
             return true
         } else {
             return false
@@ -44,10 +47,17 @@ export default function SectionPage(){
 
     function reservSeats(event){
         event.preventDefault();
-            if(seatsSelected !== []){
-                const promisse = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", );
-            promisse.then()
-            }
+        setSucessInfos({
+            ids: seatsSelected,
+            name: customerName,
+            cpf: customerCPF
+        })
+        if(isAllowToBuy(seatsSelected, customerName, customerCPF)){
+            const promisse = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", sucessInfos);
+            promisse.then(
+                history.push("/sucesso")
+            )
+        }
     }
 
     return(
@@ -78,9 +88,9 @@ export default function SectionPage(){
                 </SeatInfo>
             </Section>
             <Section>
-                {(isAllowToBuy(seatsSelected, customers))
-                ?   <SeatsForm seatsSelected={seatsSelected} reservSeats={reservSeats}/>
-                :   <SeatsForm seatsSelected={seatsSelected} />
+                {(isAllowToBuy(seatsSelected, customerName, customerCPF))
+                ?   <SeatsForm reservSeats={reservSeats} />
+                :   <SeatsForm reservSeats={reservSeats} setCustomerCPF={setCustomerCPF} setCustomerName={setCustomerName} />
                 }
                 
             </Section>

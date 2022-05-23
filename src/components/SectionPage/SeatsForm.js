@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export default function SeatsForm({ seatsSelected, isAllowToBuy, reservSeats }) {
+export default function SeatsForm({ isAllowToBuy, reservSeats, setCustomerCPF, setCustomerName }) {
 
     const [userName, setUserName] = useState("");
     const [userCPF, setUserCPF] = useState("");
@@ -13,11 +13,17 @@ export default function SeatsForm({ seatsSelected, isAllowToBuy, reservSeats }) 
         <Form onSubmit={reservSeats}>
             <label for="nameInput">Nome do comprador:</label>
             <input type="text" id="nameInput" placeholder="Digite seu nome..." value={userName} onChange={e => {
-                setUserName(e.target.value)
+                setUserName(e.target.value);
+                (userName.length > 0) 
+                ? {setCustomerName}(userName)
+                : {setCustomerName}("")
                 }} />
             <label for="cpfInput">Cpf do comprador:</label>
             <input type="number" id="cpfInput" placeholder="Digite seu CPF..." value={userCPF} onChange={e => {
                 setUserCPF(e.target.value)
+                (userCPF.length == 11) 
+                ? {setCustomerCPF}(userCPF)
+                : {setCustomerCPF}("")
                 }}/>
             {isAllowToBuy 
             ?   <Link to={"/sucesso"}><button type="submit" >Reservar assento(s)</button></Link>
